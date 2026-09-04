@@ -13,7 +13,6 @@
   let points = [];
   let animationId;
 
-  // Lower number of points on mobile for performance
   const isMobile = window.innerWidth <= 768;
   const numPoints = isMobile ? 40 : 70;
   const connectionDistance = 160;
@@ -109,7 +108,6 @@
     animationId = requestAnimationFrame(draw);
   }
 
-  // Stops drawing when tab is in background (Massive performance boost)
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       cancelAnimationFrame(animationId);
@@ -119,28 +117,10 @@
   });
 
   window.addEventListener("resize", resizeCanvas);
-  window.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-  window.addEventListener("mouseleave", () => {
-    mouseX = null;
-    mouseY = null;
-  });
-  window.addEventListener(
-    "touchmove",
-    (e) => {
-      if (e.touches[0]) {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
-      }
-    },
-    { passive: false },
-  );
-  window.addEventListener("touchend", () => {
-    mouseX = null;
-    mouseY = null;
-  });
+  window.addEventListener("mousemove", (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+  window.addEventListener("mouseleave", () => { mouseX = null; mouseY = null; });
+  window.addEventListener("touchmove", (e) => { if (e.touches[0]) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; } }, { passive: false });
+  window.addEventListener("touchend", () => { mouseX = null; mouseY = null; });
 
   resizeCanvas();
   draw();
@@ -155,9 +135,7 @@
     const typed = document.querySelector(".typed-text");
     if (!typed) return;
     const roles = ["Software Developer", "Problem Solver", "Quick Learner"];
-    let roleIndex = 0,
-      charIndex = 0,
-      isDeleting = false;
+    let roleIndex = 0, charIndex = 0, isDeleting = false;
 
     function typeEffect() {
       const current = roles[roleIndex];
@@ -187,31 +165,15 @@
 
   // SLIDE ANIMATIONS
   function initSlideAnimations() {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
-    );
-    document
-      .querySelectorAll(".slide-section")
-      .forEach((el) => obs.observe(el));
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); });
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    document.querySelectorAll(".slide-section").forEach((el) => obs.observe(el));
 
-    const tObs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) e.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -30px 0px" },
-    );
-    document
-      .querySelectorAll(
-        ".timeline-item, .card-cert.animate-left, .achieve-item.animate-right",
-      )
-      .forEach((el) => tObs.observe(el));
+    const tObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); });
+      }, { threshold: 0.2, rootMargin: "0px 0px -30px 0px" });
+    document.querySelectorAll(".timeline-item, .card-cert.animate-left, .achieve-item.animate-right").forEach((el) => tObs.observe(el));
 
     function updateTimelineProgress() {
       document.querySelectorAll(".timeline-wrapper").forEach((wrapper) => {
@@ -224,12 +186,8 @@
         line.style.height = progress + "%";
       });
     }
-    window.addEventListener("scroll", updateTimelineProgress, {
-      passive: true,
-    });
-    window.addEventListener("resize", updateTimelineProgress, {
-      passive: true,
-    });
+    window.addEventListener("scroll", updateTimelineProgress, { passive: true });
+    window.addEventListener("resize", updateTimelineProgress, { passive: true });
     setTimeout(updateTimelineProgress, 100);
   }
 
@@ -240,7 +198,7 @@
     const bottomNavItems = document.querySelectorAll(".bottom-nav-item");
 
     bottomNavItems.forEach((item) => {
-      item.addEventListener("click", function () {
+      item.addEventListener("click", function() {
         bottomNavItems.forEach((nav) => nav.classList.remove("active"));
         navLinks.forEach((nav) => nav.classList.remove("active"));
         this.classList.add("active");
@@ -253,15 +211,11 @@
       sections.forEach((s) => {
         const top = s.offsetTop;
         const h = s.clientHeight;
-        if (scrollPos >= top && scrollPos < top + h)
-          current = s.getAttribute("id");
+        if (scrollPos >= top && scrollPos < top + h) current = s.getAttribute("id");
       });
 
       navLinks.forEach((link) => {
-        link.classList.toggle(
-          "active",
-          link.getAttribute("href").substring(1) === current,
-        );
+        link.classList.toggle("active", link.getAttribute("href").substring(1) === current);
       });
 
       bottomNavItems.forEach((item) => {
@@ -284,18 +238,14 @@
         if (targetId === "#" || targetId === "") return;
         const target = document.querySelector(targetId);
         if (!target) return;
-
+        
         e.preventDefault();
         const header = document.querySelector("header");
         const offset = header ? header.offsetHeight : 0;
-
+        
         window.scrollTo({
-          top:
-            target.getBoundingClientRect().top +
-            window.pageYOffset -
-            offset -
-            10,
-          behavior: "smooth",
+          top: target.getBoundingClientRect().top + window.pageYOffset - offset - 10,
+          behavior: "smooth"
         });
       });
     });
@@ -306,14 +256,10 @@
     const bar = document.createElement("div");
     bar.className = "scroll-progress";
     document.body.appendChild(bar);
-    window.addEventListener(
-      "scroll",
-      () => {
-        const h = document.documentElement.scrollHeight - window.innerHeight;
-        bar.style.width = (window.scrollY / h) * 100 + "%";
-      },
-      { passive: true },
-    );
+    window.addEventListener("scroll", () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (window.scrollY / h) * 100 + "%";
+    }, { passive: true });
   }
 
   // CONTACT FORM
@@ -332,8 +278,7 @@
       const email = document.getElementById("email")?.value.trim();
       const message = document.getElementById("message")?.value.trim();
       if (!name || !email || !message) {
-        feedback.innerHTML =
-          '<span style="color:#f87171;">⚠️ Please fill all fields.</span>';
+        feedback.innerHTML = '<span style="color:#f87171;">⚠️ Please fill all fields.</span>';
         setTimeout(() => (feedback.innerHTML = ""), 3000);
         return;
       }
@@ -343,21 +288,15 @@
       btn.disabled = true;
       try {
         const res = await emailjs.send(serviceId, templateId, {
-          from_name: name,
-          from_email: email,
-          message: message,
-          to_email: "madhankumar8874@gmail.com",
-          reply_to: email,
-          date: new Date().toLocaleString(),
+          from_name: name, from_email: email, message: message,
+          to_email: "madhankumar8874@gmail.com", reply_to: email, date: new Date().toLocaleString(),
         });
         if (res.status === 200) {
-          feedback.innerHTML =
-            '<span style="color:#4ade80;">✨ Message sent successfully! I\'ll reply within 24 hours.</span>';
+          feedback.innerHTML = '<span style="color:#4ade80;">✨ Message sent successfully! I\'ll reply within 24 hours.</span>';
           form.reset();
         }
       } catch (err) {
-        feedback.innerHTML =
-          '<span style="color:#f87171;">❌ Failed to send. Please email directly: madhankumar8874@gmail.com</span>';
+        feedback.innerHTML = '<span style="color:#f87171;">❌ Failed to send. Please email directly: madhankumar8874@gmail.com</span>';
       } finally {
         btn.innerHTML = orig;
         btn.disabled = false;
@@ -372,9 +311,7 @@
       const loader = document.getElementById("loader");
       if (loader) {
         loader.classList.add("hidden");
-        setTimeout(() => {
-          if (loader.parentNode) loader.parentNode.removeChild(loader);
-        }, 500);
+        setTimeout(() => { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
       }
     }, 1200);
   }
