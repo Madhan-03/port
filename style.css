@@ -1235,16 +1235,21 @@ section {
     gap: 2rem;
   }
 
-  section {
-    padding-block: 96px;
+  main > section {
+    min-height: calc(100vh - 88px);
+    min-height: calc(100svh - 88px);
+    display: flex;
+    align-items: center;
+    padding-block: clamp(72px, 8vh, 96px) !important;
+    scroll-margin-top: 88px;
+  }
+
+  main > section > .container {
+    width: min(92%, 1380px);
   }
 
   .section-title {
     font-size: 2.8rem;
-  }
-
-  #home {
-    min-height: calc(100vh - 88px);
   }
 
   .home-grid {
